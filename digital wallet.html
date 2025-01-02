@@ -1,0 +1,95 @@
+// Simple Digital Wallet Implementation
+
+class Wallet {
+  constructor() {
+    this.users = {}; // Stores user accounts
+  }
+
+  // Create a new user account
+  createAccount(username) {
+    if (this.users[username]) {
+      console.log(`Account for ${username} already exists.`);
+      return;
+    }
+    this.users[username] = { balance: 0 };
+    console.log(`Account created for ${username}.`);
+  }
+
+  // Deposit funds into a user's account
+  deposit(username, amount) {
+    if (!this.users[username]) {
+      console.log(`Account for ${username} does not exist.`);
+      return;
+    }
+    if (amount <= 0) {
+      console.log(`Deposit amount must be positive.`);
+      return;
+    }
+    this.users[username].balance += amount;
+    console.log(`${amount} deposited to ${username}'s account. Current balance: ${this.users[username].balance}`);
+  }
+
+  // Withdraw funds from a user's account
+  withdraw(username, amount) {
+    if (!this.users[username]) {
+      console.log(`Account for ${username} does not exist.`);
+      return;
+    }
+    if (amount <= 0) {
+      console.log(`Withdrawal amount must be positive.`);
+      return;
+    }
+    if (this.users[username].balance < amount) {
+      console.log(`Insufficient funds in ${username}'s account.`);
+      return;
+    }
+    this.users[username].balance -= amount;
+    console.log(`${amount} withdrawn from ${username}'s account. Current balance: ${this.users[username].balance}`);
+  }
+
+  // Transfer funds between two accounts
+  transfer(sender, receiver, amount) {
+    if (!this.users[sender]) {
+      console.log(`Sender account for ${sender} does not exist.`);
+      return;
+    }
+    if (!this.users[receiver]) {
+      console.log(`Receiver account for ${receiver} does not exist.`);
+      return;
+    }
+    if (amount <= 0) {
+      console.log(`Transfer amount must be positive.`);
+      return;
+    }
+    if (this.users[sender].balance < amount) {
+      console.log(`Insufficient funds in ${sender}'s account.`);
+      return;
+    }
+    this.users[sender].balance -= amount;
+    this.users[receiver].balance += amount;
+    console.log(`${amount} transferred from ${sender} to ${receiver}.`);
+  }
+
+  // Check the balance of a user's account
+  checkBalance(username) {
+    if (!this.users[username]) {
+      console.log(`Account for ${username} does not exist.`);
+      return;
+    }
+    console.log(`Current balance for ${username}: ${this.users[username].balance}`);
+  }
+}
+
+// Example Usage
+const myWallet = new Wallet();
+
+myWallet.createAccount('Alice');
+myWallet.createAccount('Bob');
+myWallet.deposit('Alice', 100);
+myWallet.checkBalance('Alice');
+myWallet.withdraw('Alice', 50);
+myWallet.checkBalance('Alice');
+myWallet.transfer('Alice', 'Bob', 25);
+myWallet.checkBalance('Alice');
+myWallet.checkBalance('Bob');
+
